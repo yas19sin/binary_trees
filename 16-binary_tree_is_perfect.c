@@ -23,17 +23,18 @@ size_t binary_tree_depth(const binary_tree_t *tree)
 }
 
 /**
- * binary_tree_find_leaf - finds the leftmost leaf in a binary tree
+ * find_leaf - finds the leftmost leaf in a binary tree
  * @tree: pointer to the root node of the tree to search
  *
  * Return: pointer to the leftmost leaf node in the tree, or NULL if
  * the tree is empty
  */
-const binary_tree_t *binary_tree_find_leaf(const binary_tree_t *tree)
+const binary_tree_t *find_leaf(const binary_tree_t *tree)
 {
 	if (is_leaf(tree) == 1)
 		return (tree);
-	return (tree->left ? binary_tree_find_leaf(tree->left) : binary_tree_find_leaf(tree->right));
+	return (tree->left ? find_leaf(tree->left)
+					   : find_leaf(tree->right));
 }
 
 /**
@@ -68,5 +69,5 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 	if (tree == NULL)
 		return (0);
 
-	return (is_perfect_recursively(tree, binary_tree_depth(binary_tree_find_leaf(tree)), 0));
+	return (is_perfect_recursively(tree, binary_tree_depth(find_leaf(tree)), 0));
 }
