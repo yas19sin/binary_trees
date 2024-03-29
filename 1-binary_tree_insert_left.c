@@ -5,12 +5,8 @@
  * @parent: Parent node.
  * @value: Value to store in the new node.
  *
- * Returns: New node if successful, or NULL on failure.
- *
- * Description: If @parent already has a left child, the new node becomes
- * its left child and the old left child becomes the left child of the new
- * node. Otherwise, the new node is inserted as the left child of @parent.
-*/
+ * Return: New node if successful, or NULL on failure.
+ */
 binary_tree_t *binary_tree_insert_left(binary_tree_t *parent, int value)
 {
 	binary_tree_t *new;
