@@ -8,7 +8,7 @@
  */
 static inline unsigned char is_leaf(const binary_tree_t *node)
 {
-	return (node->left == NULL && node->right == NULL);
+	return ((node->left == NULL && node->right == NULL) ? 1 : 0);
 }
 
 /**
@@ -19,7 +19,7 @@ static inline unsigned char is_leaf(const binary_tree_t *node)
  */
 size_t binary_tree_depth(const binary_tree_t *tree)
 {
-	return (tree->parent ? 1 + binary_tree_depth(tree->parent) : 0);
+	return (tree->parent != NULL ? 1 + binary_tree_depth(tree->parent) : 0);
 }
 
 /**
@@ -31,13 +31,9 @@ size_t binary_tree_depth(const binary_tree_t *tree)
  */
 const binary_tree_t *binary_tree_find_leaf(const binary_tree_t *tree)
 {
-	if (is_leaf(tree))
+	if (is_leaf(tree) == 1)
 		return (tree);
-
-	if (tree->left)
-		return (binary_tree_find_leaf(tree->left));
-
-	return (binary_tree_find_leaf(tree->right));
+	return (tree->left ? binary_tree_find_leaf(tree->left) : binary_tree_find_leaf(tree->right));
 }
 
 /**
@@ -52,15 +48,10 @@ const binary_tree_t *binary_tree_find_leaf(const binary_tree_t *tree)
 static int is_perfect_recursively(const binary_tree_t *tree,
 								  size_t leaf_depth, size_t level)
 {
-	/* If the node is a leaf, it must be at the expected level. */
 	if (is_leaf(tree))
-		return (level == leaf_depth);
-
-	/* If the node is not a leaf, both children must exist. */
+		return (level == leaf_depth ? 1 : 0);
 	if (tree->left == NULL || tree->right == NULL)
 		return (0);
-
-	/* Both children must also be perfect at the next level down. */
 	return (is_perfect_recursively(tree->left, leaf_depth, level + 1) &&
 			is_perfect_recursively(tree->right, leaf_depth, level + 1));
 }
@@ -77,7 +68,5 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 	if (tree == NULL)
 		return (0);
 
-	const size_t leaf_depth = binary_tree_depth(binary_tree_find_leaf(tree));
-
-	return (is_perfect_recursively(tree, leaf_depth, 0));
+	return (is_perfect_recursively(tree, binary_tree_depth(binary_tree_find_leaf(tree)), 0));
 }
